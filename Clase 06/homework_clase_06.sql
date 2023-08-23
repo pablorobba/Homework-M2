@@ -1,24 +1,26 @@
-USE henry;
-
 #Se insertan valores en la tabla carreras.
+use henry;
+SET foreign_key_checks = 0;
+
+TRUNCATE TABLE alumno;
+TRUNCATE TABLE carrera;
+TRUNCATE TABLE instructor;
+TRUNCATE TABLE cohorte;
+
+SET foreign_key_checks = 1;
 
 INSERT INTO carrera (nombre)
 VALUES ('Full Stack Developer'),
 ('Data Science');
 
-
 SELECT * FROM carrera;
 
-# Se insertan valores en la tabla instructores.
+#Se insertan valores en la tabla instructores.
 
-# revisar en cada caso los errores puntuales que deben corregir, debido a que algunos insert no ejecutar
-
-# Hay que tener en cuenta que algunas cedulas en ciertos paises contienen valores alfanuméricos o simplemente numéricos. En este caso tomaremos la suposición de que estamos trabajando con una DB con valores alfanuméricos en la cédula.
-
-INSERT INTO instructor (cedulaIdentidad, nombre, apellido, fechaNacimiento, fechaIncorporacion) 
+INSERT instructor (cedulaIdentidad, nombre, apellido, fechaNacimiento, fechaIncorporacion) 
 VALUES (25456879,'Antonio','Barrios','1981-7-9','2019-11-8');
 
-INSERT INTO instructor (cedulaIdentidad, nombre, apellido, fechaNacimiento, fechaIncorporacion) 
+INSERT instructor (cedulaIdentidad, nombre, apellido, fechaNacimiento, fechaIncorporacion) 
 VALUES (28456321,'Lucia','Fernandez','1992-5-25','2019-11-8'),
 (27198354,'Leo','Paris','1985-6-20','2021-8-15'),
 (36987520,'Agustín','Casagne','1988-8-17','2021-8-15'),
@@ -30,7 +32,7 @@ VALUES (28456321,'Lucia','Fernandez','1992-5-25','2019-11-8'),
 #Se insertan valores en la tabla cohortes.
 INSERT INTO cohorte 
 VALUES (1235,'FT-1235',1,1,'2020-2-1','2020-6-30'),
-(1236,"FT-1236",1,2,'2020-4-5','2020-8-31'),
+(1236,'FT-1236',1,2,'2020-4-5','2020-8-31'),
 (1237,'FT-1237',1,1,'2021-7-5','2021-11-30'),
 (1238,'FT-1238',1,2,'2021-9-6','2022-1-31'),
 (1239,'FT-1239',1,3,'2022-1-10',null),
@@ -70,7 +72,7 @@ VALUES (10,'19507661','Hillary','Holman','2001-04-07','2019-12-14',1235),
   (16,'84091987','Whilemina','Howard','2000-12-03','2020-01-07',1235),
   (17,'1114943K','Keegan','Mejia','2001-01-29','2019-12-29',1235),
   (18,'32392091','Dawn','Duke','2006-07-13','2020-01-30',1235),
-  (19,'435719201','Lillith','Conley','2006-07-13','2019-12-11',1235),
+  (19,'435719201','Lillith','Conley','2002-09-13','2019-12-11',1235),
   (20,'15903996','Marsden','Sparks','2004-04-16','2019-12-25',1235);
   
 SELECT * FROM alumno;
@@ -89,7 +91,7 @@ VALUES (21,'193744389','Belle','Cervantes','2001-02-03','2020-03-17',1236),
   (31,'444744855','Isabella','Edwards','2007-05-30','2020-03-17',1236),
   (32,'64776894','Zephr','Wright','1988-09-15','2020-03-22',1236),
   (33,'372278471','Caldwell','Mckenzie','1984-04-26','2020-03-18',1236),
-  (34,'3026648K', 'Fiona','Gamble','1981-08-17','2020-03-05',1236),
+  (34,'3026648K','Fiona','Gamble','1981-08-17','2020-03-05',1236),
   (35,'381918319','Margaret','Bentley','1981-07-25','2020-02-17',1236),
   (36,'29537372','Xena','Merrill','1985-12-05','2020-02-27',1236),
   (37,'343468598','Simone','Osborn','1988-08-27','2020-03-22',1236),
@@ -98,7 +100,6 @@ VALUES (21,'193744389','Belle','Cervantes','2001-02-03','2020-03-17',1236),
   (40,'3122182K','Elvis','Macdonald','2008-12-19','2020-04-12',1236);
 
 #No es necesario buscar errores en las sentencias que siguen.
-
 
 SELECT * FROM alumno;
 
@@ -256,42 +257,73 @@ VALUES (161,'41944781','Stephanie','Hurst','1986-11-23','2022-02-14',1243),
   (179,'402918667','Imani','Mack','2000-07-28','2022-01-29',1243),
   (180,'277347865','William','Long','2009-12-06','2022-02-09',1243);
   
-  
-  
-#Tarea Clase 6  
-DELETE FROM cohorte WHERE idCohorte = 1245;
-DELETE FROM cohorte WHERE idCohorte = 1246;
 
+-- 2.	No se sabe con certeza el lanzamiento de las cohortes N° 1245 y N° 1246, 
+-- se solicita que las elimine de la tabla.<br>
+DELETE FROM cohorte
+WHERE idCohorte IN (1245, 1246);
+
+-- 3. Se ha decidido retrasar el comienzo de la cohorte N°1243,
+-- por lo que la nueva fecha de inicio será el 16/05.
+-- Se le solicita modificar la fecha de inicio de esos alumnos.
 UPDATE cohorte
-SET fechaInicio = "2023/05/16"
+SET fechaInicio = '2022-05-16'
 WHERE idCohorte = 1243;
 
+-- 4. El alumno N° 165 solicito el cambio de su Apellido por “Ramirez”.
 UPDATE alumno
-SET apellido = "Ramirez"
-WHERE IdAlumno = 165;
+SET apellido = 'Ramirez'
+WHERE idAlumno = 165;
 
-SELECT nombre,apellido,fechaIngreso as AlumnosFechaDeIngreso
+-- 5. El área de Learning le solicita un listado de alumnos de la Cohorte N°1243
+-- que incluya la fecha de ingreso.
+SELECT *
 FROM alumno
-WHERE idCohorte= 1243;
+WHERE idCohorte = 1243;
 
+-- 6.Como parte de un programa de actualización, el área de People le solicita un listado de los instructores
+-- que dictan la carrera de Full Stack Developer.
 SELECT DISTINCT idInstructor
 FROM cohorte
 WHERE idCarrera = 1;
 
 SELECT *
+FROM instructor
+WHERE idInstructor <= 5;
+
+SELECT DISTINCT i.idInstructor, i.nombre, i.apellido, ca.nombre
+FROM instructor i
+JOIN cohorte c ON (c.idInstructor = i.idInstructor)
+JOIN carrera ca ON (c.idCarrera = ca.idCarrera)
+WHERE ca.nombre LIKE '%Full Stack%';
+
+-- 7. Se desea saber que alumnos formaron parte de la cohorte N° 1235. Elabore un listado.
+SELECT *
 FROM alumno
 WHERE idCohorte = 1235;
 
+-- 8. Del listado anterior se desea saber quienes ingresaron en el año 2019.
 SELECT *
 FROM alumno
 WHERE idCohorte = 1235
 -- AND fechaIngreso BETWEEN '2019-01-01' AND '2019-12-31';
-AND fechaIngreso < "2019/01/01";
+AND year(fechaIngreso) = 2019;
 
+-- 9
+/*Conteste la siguientes interrogantes:
+  a. ¿Que campos permiten que se puedan acceder al nombre de la carrera?
+  b. ¿Que tipo de ralación existe entre el nombre la tabla cohortes y alumnos?
+  c. ¿Proponga dos opciones para filtrar el listado solo por los alumnos
+	que pertenecen a 'Full Stack Developer', utilizando LIKE y NOT LIKE?,
+    ¿Cual de las dos opciones es la manera correcta de hacerlo?, ¿Por que?
+  d. ¿Proponga dos opciones para filtrar el listado solo por los alumnos que pertenecen a 'Full Stack Developer',
+	utilizando " = " y " != "?  ¿Cual de las dos opciones es la manera correcta de hacerlo?, ¿Por que?
+  e. ¿Como emplearía el filtrado utilizando el campo idCarrera?*/
+  
 SELECT a.nombre, a.apellido, a.fechaNacimiento, ca.nombre AS nombre_carrera
 FROM alumno a
 JOIN cohorte c ON (c.idCohorte = a.idCohorte)
-JOIN carrera ca ON (c.idCarrera = ca.ID)
+JOIN carrera ca ON (c.idCarrera = ca.idCarrera)
 -- WHERE ca.nombre LIKE '%Full Stack%'; -- OK
 -- WHERE ca.nombre NOT LIKE ('%Data%'); -- NOT OK
 -- WHERE ca.nombre = 'Full Stack Developer'; -- OK
@@ -299,79 +331,8 @@ WHERE ca.nombre != 'Data Science'; -- NOT OK
 
 
 
-#Tarea Clase 7
--- 1)
-SELECT count(*) as cantidad_carreras
-FROM carrera;
 
--- 2)
-SELECT count(IdAlumno) as cantidad_alumno
-FROM alumno;
 
--- 3)
-SELECT idCohorte, count(*) as cantidad_alumnos
-FROM alumno
-GROUP BY idCohorte;
 
--- 4)
-SELECT concat(nombre," ", apellido) as alumnos
-FROM alumno
-ORDER BY fechaNacimiento DESC;
 
--- 5)
-SELECT concat(nombre," ", apellido) as alumnos
-FROM alumno
-ORDER BY fechaNacimiento DESC
-LIMIT 1;
 
--- 6)
-SELECT fechaIngreso
-FROM alumno
-ORDER BY fechaNacimiento DESC
-LIMIT 1;
-
--- 7)
-SELECT concat(nombre," ", apellido) as alumnos
-FROM alumno
-ORDER BY fechaIngreso
-LIMIT 1;
-
--- 8)
-SELECT year(fechaIngreso),  count(*) as cantidadPorAño
-FROM alumno
-GROUP BY YEAR(fechaIngreso);
-
--- 9)
-SELECT year(fechaIngreso) as año, weekofyear(fechaIngreso) as semana,  count(*) as cantidadPorsemana
-FROM alumno
-GROUP BY YEAR(fechaIngreso), WEEKOFYEAR(fechaIngreso);
-
--- 10)
-SELECT year(fechaIngreso),  count(*) as cantidadPorAño
-FROM alumno
-GROUP BY YEAR(fechaIngreso)
-HAVING count(*) >=20;
-
--- 11)
-SELECT concat(nombre," ", apellido) as instructor, timestampdiff(YEAR, fechaNacimiento, curdate()) as Edad,
-date_add(fechaNacimiento,interval timestampdiff(Year,fechaNacimiento, curdate()) year) as verificacion, 
-fechaNacimiento
-FROM instructor;
-
--- 12)
-#a)
-SELECT concat(nombre," ", apellido) as alumno, timestampdiff(YEAR, fechaNacimiento, curdate()) as Edad
-FROM alumno;
-#b)
-SELECT idCohorte, avg(timestampdiff(YEAR, fechaNacimiento, curdate())) as Edad
-FROM alumno;
-#c)
-SELECT idCohorte, avg(timestampdiff(YEAR, fechaNacimiento, curdate())) as Edad
-FROM alumno
-GROUP BY idCohorte;
-
--- 13)
-SELECT concat(nombre," ", apellido) as alumno, timestampdiff(YEAR, fechaNacimiento, curdate()) as Edad
-FROM alumno
-WHERE timestampdiff(YEAR, fechaNacimiento, curdate()) < 
-(SELECT avg(timestampdiff(YEAR, fechaNacimiento, curdate())) from alumno);

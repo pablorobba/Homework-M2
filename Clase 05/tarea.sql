@@ -5,41 +5,39 @@ CREATE DATABASE henry;
 USE henry;
 CREATE TABLE carrera (
     ID INT NOT NULL AUTO_INCREMENT,
-	nombre VARCHAR(50),
+	nombre VARCHAR(50) NOT NULL,
     PRIMARY KEY (ID)
 );
-CREATE TABLE instructores (
+CREATE TABLE instructor (
   ID INT NOT NULL AUTO_INCREMENT,
-  cedulaDeIdentidad INT NOT NULL,
-  nombre VARCHAR(20),
-  apellido VARCHAR (20),
+  cedulaIdentidad VARCHAR (30) NOT NULL,
+  nombre VARCHAR(40),
+  apellido VARCHAR (40),
   fechaNacimiento DATE,
   fechaIncorporacion DATE,
   PRIMARY KEY (ID)
 );
-CREATE TABLE alumnos (
-  ID INT NOT NULL AUTO_INCREMENT,
-  cedulaDeIdentidad INT NOT NULL,
-  nombre VARCHAR(20),
-  apellido VARCHAR (20),
+CREATE TABLE cohorte (
+  idCohorte INT NOT NULL AUTO_INCREMENT,
+  codigo VARCHAR(30),
+  IdCarrera VARCHAR(30),
+  IdInstructor INT NOT NULL,
+  fechaInicio DATE,
+  fechaFinalizacion DATE,
+  PRIMARY KEY (idCohorte),
+  foreign key(IDInstructor) references instructor(ID)
+);
+CREATE TABLE alumno (
+  IdAlumno INT NOT NULL AUTO_INCREMENT,
+  cedulaIdentidad VARCHAR (30) NOT NULL,
+  nombre VARCHAR(50),
+  apellido VARCHAR (50),
   fechaNacimiento DATE,
   fechaIngreso DATE,
-  IDCohorte VARCHAR (20),
-  PRIMARY KEY (ID)
-);
-CREATE TABLE cohorte (
-  ID INT NOT NULL AUTO_INCREMENT,
-  IDInstructores INT NOT NULL,
-  IDAlumnos INT NOT NULL,
-  IDCarrera INT NOT NULL,
-  codigo VARCHAR(20),
-  carrera VARCHAR(20),
-  instructor VARCHAR (20),
-  fechaInicio DATE,
-  fechaFinalización DATE,
-  PRIMARY KEY (ID),
-  foreign key(IDAlumnos) references alumnos(ID),
-  foreign key(IDInstructores) references instructores(ID),
-  foreign key(IDCarrera) references carrera(ID)
+  idCohorte INT,
+  PRIMARY KEY (IdAlumno),
+  FOREIGN KEY (idCohorte) REFERENCES cohorte(idCohorte)
 );
 DESC cohorte
+
+
